@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bat.crm.mapper.OrdersVoMapper" >
+  <resultMap id="OrdersVoResultMap" type="com.bat.crm.vo.OrdersVo" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+      <result column="order_goodsNum" property="orderGoodsNum" jdbcType="VARCHAR" />
+      <result column="order_price" property="orderPrice" jdbcType="VARCHAR" />
+      <result column="order_brithTime" property="orderBrithTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!--查询所有-->
+  <select id="selectCustomerOrdersVo"  resultMap="OrdersVoResultMap">
+       SELECT o.order_id,order_goodsNum,order_price,order_brithTime,c.customer_name,g.goods_name FROM goods g,customer c,orders o
+     WHERE o.order_customer=c.customer_id and o.order_goods=g.goods_id
+  </select>
+
+  <!--根据客户姓名查询-->
+  <select id="selectCustomerContactVoKeyName"  resultMap="OrdersVoResultMap"  parameterType="String">
+      SELECT o.order_id,order_goodsNum,order_price,order_brithTime,c.customer_name,g.goods_name FROM goods g,customer c,orders o
+     WHERE o.order_customer=c.customer_id and o.order_goods=g.goods_id and customer_name=#{customerName,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据货物名查询-->
+  <select id="selectCustomerContactVoKeyGoodName"  resultMap="OrdersVoResultMap"  parameterType="String">
+      SELECT o.order_id,order_goodsNum,order_price,order_brithTime,c.customer_name,g.goods_name FROM goods g,customer c,orders o
+     WHERE o.order_customer=c.customer_id and o.order_goods=g.goods_id and goods_name=#{goodsName,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据ID查询-->
+  <select id="selectByPrimaryKeyOrdersVo"  resultType="com.bat.crm.vo.OrdersVo" parameterType="java.lang.Integer">
+         SELECT o.order_id,order_goodsNum,order_price,order_brithTime,c.customer_name,g.goods_name FROM goods g,customer c,orders o
+     WHERE o.order_customer=c.customer_id and o.order_goods=g.goods_id and order_id=#{orderId,jdbcType=INTEGER}
+  </select>
+
+  <!--根据ID删除-->
+  <delete id="delOrdersVo" parameterType="java.lang.Integer">
+      DELETE FROM orders WHERE  order_id=#{orderId,jdbcType=INTEGER}
+  </delete>
+
+
+  <insert id="insertOrdersVo" parameterType="com.bat.crm.entity.Orders" >
+    insert into orders (order_id, order_customer, order_goods,order_goodsNum,order_price,order_brithTime)
+    values (#{orderId,jdbcType=INTEGER}, #{orderCustomer,jdbcType=INTEGER}, #{orderGoods,jdbcType=INTEGER},#{orderGoodsNum,jdbcType=VARCHAR},#{orderPrice,jdbcType=VARCHAR},#{orderBrithTime,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateOrdersVo" parameterType="com.bat.crm.entity.Orders" >
+    update orders
+    <set >
+      <if test="orderCustomer != null" >
+          order_customer = #{orderCustomer,jdbcType=INTEGER},
+      </if>
+      <if test="orderGoods != null" >
+          order_goods = #{orderGoods,jdbcType=INTEGER},
+      </if>
+      <if test="orderGoodsNum != null" >
+          order_goodsNum = #{orderGoodsNum,jdbcType=VARCHAR},
+      </if>
+        <if test="orderPrice != null" >
+            order_price = #{orderPrice,jdbcType=VARCHAR},
+        </if>
+        <if test="orderBrithTime != null" >
+            order_brithTime = #{orderBrithTime,jdbcType=VARCHAR},
+        </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+
+
+
+
+</mapper>

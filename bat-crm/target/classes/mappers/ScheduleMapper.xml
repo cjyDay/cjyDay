@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bat.crm.mapper.ScheduleMapper" >
+  <resultMap id="ScheduleResultMap" type="com.bat.crm.vo.ScheduleVo" >
+    <id column="schedule_id" property="scheduleId" jdbcType="INTEGER" />
+    <result column="schedule_title" property="scheduleTitle" jdbcType="VARCHAR" />
+    <result column="schedule_type" property="scheduleType" jdbcType="VARCHAR" />
+    <result column="schedule_startTime" property="scheduleStartTime" jdbcType="VARCHAR" />
+    <result column="schedule_finishTime" property="scheduleFinishTime" jdbcType="VARCHAR" />
+    <result column="schedule_state" property="scheduleState" jdbcType="VARCHAR" />
+    <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+  <!--查询所有-->
+  <select id="selectAllList"  resultMap="ScheduleResultMap">
+ SELECT s.schedule_id,schedule_title,schedule_type,schedule_startTime,schedule_finishTime,schedule_state,a.admin_name FROM admin a,schedule s
+     WHERE s.schedule_uname=a.admin_id
+  </select>
+
+
+  <select id="selectByPrimaryKeySchedule" resultMap="ScheduleResultMap" parameterType="java.lang.Integer" >
+ SELECT s.schedule_id,schedule_title,schedule_type,schedule_startTime,schedule_finishTime,schedule_state,a.admin_name FROM admin a,schedule s
+     WHERE s.schedule_uname=a.admin_id and schedule_id=#{scheduleId,jdbcType=INTEGER}
+  </select>
+
+
+
+  <delete id="delSchedule" parameterType="java.lang.Integer">
+      DELETE FROM schedule WHERE  schedule_id=#{scheduleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSchedule" parameterType="com.bat.crm.entity.Schedule" >
+    insert into schedule (schedule_id, schedule_title, schedule_type,schedule_startTime,schedule_finishTime,schedule_state,schedule_uname)
+    values (#{scheduleId,jdbcType=INTEGER}, #{scheduleTitle,jdbcType=VARCHAR}, #{scheduleType,jdbcType=VARCHAR},
+     #{scheduleStartTime,jdbcType=VARCHAR},#{scheduleFinishTime,jdbcType=VARCHAR},#{scheduleState,jdbcType=VARCHAR},#{scheduleUName,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySchedule" parameterType="com.bat.crm.entity.Schedule">
+    update schedule
+    <set>
+      <if test="scheduleTitle!=null and scheduleTitle!=''">schedule_title = #{scheduleTitle},</if>
+      <if test="scheduleType!=null and scheduleType!=''">schedule_type= #{scheduleType},</if>
+      <if test="scheduleStartTime!=null and scheduleStartTime!=''">schedule_startTime= #{scheduleStartTime},</if>
+      <if test="scheduleFinishTime!=null and scheduleFinishTime!=''">schedule_finishTime= #{scheduleFinishTime},</if>
+      <if test="scheduleState!=null and scheduleState!=''">schedule_state= #{scheduleState},</if>
+      <if test="scheduleUName!=null and scheduleUName!=''">schedule_uname= #{scheduleUName}</if>
+    </set>
+    <where>
+      <if test="scheduleId!=null">schedule_id = #{scheduleId}</if>
+    </where>
+  </update>
+
+
+</mapper>

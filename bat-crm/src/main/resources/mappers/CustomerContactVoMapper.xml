@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bat.crm.mapper.CustomerContactVoMapper" >
+  <resultMap id="CustomerContactVoResultMap" type="com.bat.crm.vo.CustomerContactVo" >
+    <id column="contact_id" property="contactId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="employee_name" property="employeeName" jdbcType="VARCHAR" />
+    <result column="contact_times" property="contactTimes" jdbcType="INTEGER" />
+
+  </resultMap>
+
+  <!--查询所有-->
+  <select id="selectCustomerContactVo"  resultMap="CustomerContactVoResultMap">
+       SELECT co.contact_id,contact_times,c.customer_name,e.employee_name FROM employee e,customer_contact co,customer c
+     WHERE co.contact_customer=c.customer_id and co.contact_employee=e.employee_id
+  </select>
+
+  <!--根据客户姓名查询-->
+  <select id="selectCustomerContactVoKeyName"  resultMap="CustomerContactVoResultMap"  parameterType="String">
+      SELECT co.contact_id,contact_times,c.customer_name,e.employee_name FROM employee e,customer_contact co,customer c
+     WHERE co.contact_customer=c.customer_id and co.contact_employee=e.employee_id and customer_name=#{customerName,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据员工姓名查询-->
+  <select id="selectCustomerContactVoKeyEmployeeName"  resultMap="CustomerContactVoResultMap"  parameterType="String">
+      SELECT co.contact_id,contact_times,c.customer_name,e.employee_name FROM employee e,customer_contact co,customer c
+     WHERE co.contact_customer=c.customer_id and co.contact_employee=e.employee_id and employee_name=#{employeeName,jdbcType=VARCHAR}
+  </select>
+  <!--根据ID查询-->
+  <select id="selectByPrimaryKeyCustomerContactVo"  resultType="com.bat.crm.vo.CustomerContactVo" parameterType="java.lang.Integer">
+        SELECT co.contact_id,contact_times,c.customer_name,e.employee_name FROM employee e,customer_contact co,customer c
+     WHERE co.contact_customer=c.customer_id and co.contact_employee=e.employee_id and contact_id=#{contactId,jdbcType=INTEGER}
+  </select>
+
+  <!--根据ID删除-->
+  <delete id="delCustomerContactVo" parameterType="java.lang.Integer">
+      DELETE FROM customer_contact WHERE  contact_id=#{contactId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertCustomerContactVo" parameterType="com.bat.crm.entity.CustomerContact" >
+    insert into customer_contact (contact_id, contact_customer, contact_employee,contact_times)
+    values (#{contactId,jdbcType=INTEGER}, #{contactCustomer,jdbcType=INTEGER}, #{contactEmployee,jdbcType=INTEGER},#{contactTimes,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateCustomerContactVo" parameterType="com.bat.crm.entity.CustomerContact" >
+    update customer_contact
+    <set >
+      <if test="contactCustomer != null" >
+        contact_customer = #{contactCustomer,jdbcType=INTEGER},
+      </if>
+      <if test="contactEmployee != null" >
+        contact_employee = #{contactEmployee,jdbcType=INTEGER},
+      </if>
+      <if test="contactTimes != null" >
+        contact_times = #{contactTimes,jdbcType=INTEGER},
+      </if>
+
+    </set>
+    where contact_id = #{contactId,jdbcType=INTEGER}
+  </update>
+
+
+
+
+</mapper>

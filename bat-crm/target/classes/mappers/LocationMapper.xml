@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bat.crm.mapper.LocationMapper" >
+  <resultMap id="LocationResultMap" type="com.bat.crm.entity.Location" >
+    <id column="location_id" property="locationId" jdbcType="INTEGER" />
+    <result column="location_name" property="locationName" jdbcType="VARCHAR" />
+
+
+  </resultMap>
+  <sql id="Base_Location_List" >
+    location_id, location_name
+  </sql>
+
+
+  <!--查询所有-->
+  <select id="selectAllList"  resultMap="LocationResultMap">
+    select
+    <include refid="Base_Location_List" />
+    from location
+  </select>
+
+
+  <select id="selectByPrimaryKeyLocation" resultMap="LocationResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Location_List" />
+    from location
+    where location_id = #{locationId,jdbcType=INTEGER}
+  </select>
+
+
+
+
+  <insert id="insertLocation" parameterType="com.bat.crm.entity.Location" >
+    insert into location (location_id, location_name)
+    values (#{locationId,jdbcType=INTEGER}, #{locationName,jdbcType=VARCHAR})
+  </insert>
+
+
+
+
+</mapper>

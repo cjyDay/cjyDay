@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bat.crm.mapper.OrderStateMapper" >
+  <resultMap id="OrderStateVoResultMap" type="com.bat.crm.vo.OrderStateVo">
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_state" property="orderState" jdbcType="VARCHAR"/>
+
+
+  </resultMap>
+  <sql id="Base_OrderStateVo_List" >
+    order_id, order_state
+  </sql>
+
+
+  <!--查询所有-->
+  <select id="selectAllListOrderState"  resultMap="OrderStateVoResultMap">
+    select
+    <include refid="Base_OrderStateVo_List" />
+    from order_state
+  </select>
+
+
+  <select id="selectByPrimaryKeyOrderState" resultMap="OrderStateVoResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_OrderStateVo_List" />
+    from order_state
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+
+
+
+  <delete id="delOrderState" parameterType="java.lang.Integer">
+      DELETE FROM order_state WHERE  order_id=#{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertOrderState" parameterType="com.bat.crm.vo.OrderStateVo" >
+    insert into order_state (order_id, order_state)
+    values (#{orderId,jdbcType=INTEGER}, #{orderState,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <update id="updateByPrimaryKeyOrderState" parameterType="com.bat.crm.vo.OrderStateVo">
+    update order_state
+    <set>
+      <if test="orderState!=null and orderState!=''">order_state = #{orderState}</if>
+    </set>
+    <where>
+      <if test="orderId!=null">order_id = #{orderId}</if>
+    </where>
+  </update>
+
+
+</mapper>
